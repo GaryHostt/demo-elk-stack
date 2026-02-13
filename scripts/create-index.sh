@@ -4,10 +4,19 @@
 
 set -e
 ES_URL="${ELASTICSEARCH_URL:-http://localhost:9200}"
+MAX_ATTEMPTS=30
+SLEEP=2
 
 echo "Waiting for Elasticsearch at $ES_URL..."
+attempt=0
 until curl -sf "$ES_URL/_cluster/health" > /dev/null 2>&1; do
-  sleep 2
+  attempt=$((attempt + 1))
+  if [[ $attempt -ge $MAX_ATTEMPTS ]]; then
+    echo "Could not reach Elasticsearch at $ES_URL after $((MAX_ATTEMPTS * SLEEP))s." >&2
+    echo "Is Docker running? Start the stack with: docker compose up -d" >&2
+    exit 1
+  fi
+  sleep $SLEEP
 done
 echo "Elasticsearch is up."
 

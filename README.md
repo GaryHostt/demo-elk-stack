@@ -2,6 +2,11 @@
 
 Minimal local Elasticsearch + Kibana stack with random logs, for demos where an external Mule app calls Elasticsearch (e.g. `elk-search-logic-flow` and `anomaly-status-flow`).
 
+## Prerequisites
+
+- **Docker** installed and the Docker daemon **running** (e.g. Docker Desktop started).
+- If `docker compose up -d` fails with "Cannot connect to the Docker daemon", start Docker and try again.
+
 ## Quick start
 
 1. **Start the stack**
@@ -22,6 +27,8 @@ Minimal local Elasticsearch + Kibana stack with random logs, for demos where an 
    ```
 
 4. **Optional:** Open Kibana at [http://localhost:5601](http://localhost:5601) and create an index pattern for `my-index`, then use Discover to view logs.
+
+5. **Verify:** Run `./scripts/show-logs.sh` to print recent logs from the index (confirms the stack is working). With [jq](https://jqlang.github.io/jq/) installed, output is formatted; optional filter: `./scripts/show-logs.sh service-a` or `SERVICE_ID=service-a ./scripts/show-logs.sh`.
 
 ## Connecting your Mule app
 
@@ -62,9 +69,11 @@ The default index is `my-index`. If your app uses a different name, set the Mule
 
 | Variable | Default | Description |
 |----------|---------|-------------|
-| `ELASTICSEARCH_URL` | `http://localhost:9200` | Used by `create-index.sh` and `generate-logs.js`. |
-| `ELASTICSEARCH_INDEX` | `my-index` | Index used by `generate-logs.js`. |
+| `ELASTICSEARCH_URL` | `http://localhost:9200` | Used by `create-index.sh`, `generate-logs.js`, and `show-logs.sh`. |
+| `ELASTICSEARCH_INDEX` | `my-index` | Index used by `generate-logs.js` and `show-logs.sh`. |
 | `LOG_COUNT` | `300` | Number of log documents to generate. |
+| `SHOW_LOGS_COUNT` | `15` | Number of log lines shown by `show-logs.sh`. |
+| `SERVICE_ID` | — | Optional: filter `show-logs.sh` by service (e.g. `service-a`). |
 
 ## Index mapping
 
