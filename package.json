@@ -1,0 +1,11 @@
+{
+  "name": "local-elk",
+  "description": "Local ELK stack demo for Mule app",
+  "private": true,
+  "scripts": {
+    "generate-logs": "node scripts/generate-logs.js"
+  },
+  "dependencies": {
+    "@elastic/elasticsearch": "^8.15.0"
+  }
+}
